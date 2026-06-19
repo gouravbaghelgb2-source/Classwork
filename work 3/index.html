@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canva Editor Clone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* ===================== TOP NAVBAR ===================== */
+    .top-bar {
+      height: 50px;
+      background: linear-gradient(90deg, #1a1a3e 0%, #2d1b6e 30%, #4a1a8a 60%, #1a6b8a 100%);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 2px;
+      flex-shrink: 0;
+      z-index: 200;
+    }
+
+    .top-menu-btn {
+      padding: 5px 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      font-weight: 500;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .top-menu-btn:hover { background: rgba(255,255,255,0.15); }
+
+    .top-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 4px;
+    }
+
+    .top-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      transition: background 0.15s;
+    }
+    .top-icon-btn:hover { background: rgba(255,255,255,0.15); }
+    .top-icon-btn.disabled { color: rgba(255,255,255,0.35); cursor: default; }
+    .top-icon-btn.disabled:hover { background: none; }
+
+    .editing-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .editing-btn:hover { background: rgba(255,255,255,0.15); }
+    .pencil-icon { color: rgba(255,255,255,0.9); font-size: 13px; }
+
+    .new-badge {
+      font-size: 8px;
+      background: #7d2ae8;
+      color: #fff;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-weight: 800;
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .new-wrap { position: relative; display: flex; align-items: center; }
+
+    .magic-circle-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .magic-circle-btn:hover { background: rgba(255,255,255,0.15); }
+
+    .top-center { flex: 1; display: flex; justify-content: center; }
+    .sample-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .sample-text:hover { background: rgba(255,255,255,0.15); }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-trial {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-trial:hover { background: rgba(255,255,255,0.25); }
+    .crown-icon { color: #ffd700; font-size: 11px; }
+
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b0000, #c0392b);
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-present {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-present:hover { background: rgba(255,255,255,0.2); }
+
+    .btn-chevron-down {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 10px;
+    }
+
+    .btn-share {
+      padding: 6px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #7d2ae8;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-share:hover { opacity: 0.88; }
+
+    /* ===================== MAIN EDITOR LAYOUT ===================== */
+    .editor-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ===================== LEFT ICON SIDEBAR ===================== */
+    .icon-sidebar {
+      width: 76px;
+      background: #fff;
+      border-right: 1px solid #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      gap: 0;
+      flex-shrink: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .icon-sidebar::-webkit-scrollbar { width: 0; }
+
+    .sidebar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 66px;
+      padding: 10px 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      gap: 4px;
+      border: none;
+      background: none;
+      transition: background 0.15s;
+      margin-bottom: 2px;
+    }
+    .sidebar-item:hover { background: #f0f0f0; }
+    .sidebar-item.active { background: #e8f4f8; }
+    .sidebar-item .si-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .sidebar-item.active .si-icon { color: #00b4c8; }
+    .sidebar-item:not(.active) .si-icon { color: #555; }
+    .sidebar-item .si-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: #555;
+      text-align: center;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .sidebar-item.active .si-label { color: #00b4c8; }
+
+    /* Templates icon - teal colored grid */
+    .template-icon {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      width: 22px;
+      height: 22px;
+    }
+    .template-icon span {
+      border-radius: 1px;
+      background: #00b4c8;
+    }
+    .sidebar-item:not(.active) .template-icon span { background: #888; }
+
+    /* ===================== LEFT PANEL ===================== */
+    .left-panel {
+      width: 292px;
+      background: #fff;
+      border-right: 1px solid #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel-top {
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 7px 10px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .search-row .plus-icon { color: #555; font-size: 14px; cursor: pointer; }
+    .search-row input {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      flex: 1;
+      color: #333;
+      background: none;
+    }
+    .search-row input::placeholder { color: #aaa; }
+    .search-row .mic-ic { color: #888; font-size: 13px; cursor: pointer; }
+
+    .action-row {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-gen {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1.5px solid #e0e0e0;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-gen:hover { background: #f8f8f8; }
+    .btn-gen .star-icon { color: #7d2ae8; font-size: 14px; }
+
+    .btn-srch {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      background: #7d2ae8;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-srch:hover { opacity: 0.9; }
+
+    .panel-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .panel-scroll::-webkit-scrollbar { width: 4px; }
+    .panel-scroll::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .sec-head span { font-size: 13px; font-weight: 700; color: #222; }
+    .sec-head a { font-size: 12px; color: #555; text-decoration: none; }
+    .sec-head a:hover { text-decoration: underline; }
+
+    /* Recently used - 2 wide thumbnails */
+    .recent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .recent-thumb {
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      border: 1px solid #e8e8e8;
+      transition: box-shadow 0.15s;
+    }
+    .recent-thumb:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .recent-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* All results - 2 col grid, portrait cards */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .result-card {
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 2/3;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid #e8e8e8;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .result-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.18); transform: translateY(-2px); }
+    .result-card img { width: 100%; height: 100%; object-fit: cover; }
+    .w-badge {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 16px;
+      height: 16px;
+      background: #ffd700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      font-weight: 900;
+      color: #333;
+    }
+
+    /* collapse arrow on right edge of panel */
+    .panel-collapse-arrow {
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 44px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-left: none;
+      border-radius: 0 6px 6px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+      color: #888;
+      z-index: 10;
+    }
+    .panel-collapse-arrow:hover { background: #f5f5f5; }
+
+    /* ===================== CANVAS WRAPPER ===================== */
+    .canvas-zone {
+      flex: 1;
+      background: #e5e5e5;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* canvas-zone ka scrollable center area */
+    .canvas-scroll-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating second toolbar - centered at top of canvas */
+    .float-toolbar-top {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      gap: 3px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+      white-space: nowrap;
+    }
+    .ft-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 13px;
+      color: #333;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .ft-btn:hover { background: #f0f0f0; }
+    .ft-sep { width: 1px; height: 20px; background: #e0e0e0; margin: 0 2px; }
+    .red-dot { width: 14px; height: 14px; border-radius: 50%; background: #e74c3c; display: inline-block; }
+    .ft-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 5px; cursor: pointer; transition: background 0.15s; border: none; background: none; font-size: 16px; color: #444; }
+    .ft-icon:hover { background: #f0f0f0; }
+
+    /* Line icon (three horizontal lines) */
+    .lines-icon { display: flex; flex-direction: column; gap: 3px; }
+    .lines-icon span { width: 16px; height: 2px; background: #444; border-radius: 1px; display: block; }
+
+    /* Corner radius icon */
+    .corner-icon { width: 16px; height: 16px; border: 2px solid #444; border-radius: 4px 0 0 0; border-right: none; border-bottom: none; }
+
+    /* Grid icon */
+    .grid-icon { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; width: 14px; height: 14px; }
+    .grid-icon span { background: #aaa; border-radius: 1px; }
+
+    /* Paintbrush icon */
+    .ft-paint { font-size: 16px; color: #444; }
+
+    /* ===================== CANVAS ===================== */
+    .canvas-board {
+      background: #fff;
+      width: 800px;
+      height: 430px;
+      position: relative;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      border-radius: 2px;
+    }
+
+    /* ---- SHAPES ---- */
+    /* Row 1 */
+    .sh-circle {
+      position: absolute;
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: #7ed957;
+      top: 44px; left: 42px;
+      cursor: pointer;
+    }
+    .sh-square {
+      position: absolute;
+      width: 125px; height: 120px;
+      background: #f5c542;
+      top: 48px; left: 218px;
+      cursor: pointer;
+    }
+    .sh-triangle {
+      position: absolute;
+      width: 0; height: 0;
+      border-left: 68px solid transparent;
+      border-right: 68px solid transparent;
+      border-bottom: 125px solid #f07030;
+      top: 47px; left: 380px;
+      cursor: pointer;
+    }
+    .sh-pentagon {
+      position: absolute;
+      width: 120px; height: 115px;
+      background: #1e1fa0;
+      clip-path: polygon(50% 0%, 100% 36%, 82% 100%, 18% 100%, 0% 36%);
+      top: 44px; left: 538px;
+      cursor: pointer;
+    }
+
+    /* Row 2 */
+    .sh-plus {
+      position: absolute;
+      width: 105px; height: 105px;
+      background: #111;
+      clip-path: polygon(35% 0%,65% 0%,65% 35%,100% 35%,100% 65%,65% 65%,65% 100%,35% 100%,35% 65%,0% 65%,0% 35%,35% 35%);
+      top: 248px; left: 44px;
+      cursor: pointer;
+    }
+    .sh-parallelogram {
+      position: absolute;
+      width: 130px; height: 95px;
+      background: #c084fc;
+      clip-path: polygon(22% 0%, 100% 0%, 78% 100%, 0% 100%);
+      top: 258px; left: 216px;
+      cursor: pointer;
+    }
+    .sh-arrow {
+      position: absolute;
+      width: 108px; height: 115px;
+      background: #a78bfa;
+      clip-path: polygon(50% 0%,100% 42%,72% 42%,72% 100%,28% 100%,28% 42%,0% 42%);
+      top: 246px; left: 384px;
+      cursor: pointer;
+    }
+
+    /* Heart (selected) */
+    .sh-heart-container {
+      position: absolute;
+      top: 245px; left: 534px;
+      width: 118px; height: 115px;
+      cursor: pointer;
+    }
+    .sh-heart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Selection box around heart */
+    .selection-box {
+      position: absolute;
+      inset: -5px;
+      border: 1.5px solid #7d2ae8;
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    /* Resize handles */
+    .rh {
+      position: absolute;
+      width: 9px; height: 9px;
+      background: #fff;
+      border: 1.5px solid #7d2ae8;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .rh.tl { top: -9px; left: -9px; }
+    .rh.tc { top: -9px; left: calc(50% - 4px); }
+    .rh.tr { top: -9px; right: -9px; }
+    .rh.ml { top: calc(50% - 4px); left: -9px; }
+    .rh.mr { top: calc(50% - 4px); right: -9px; }
+    .rh.bl { bottom: -9px; left: -9px; }
+    .rh.bc { bottom: -9px; left: calc(50% - 4px); }
+    .rh.br { bottom: -9px; right: -9px; }
+
+    /* Rotate handle below selection */
+    .rotate-btn {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #7d2ae8;
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    /* Floating action toolbar ABOVE heart */
+    .shape-float-bar {
+      position: absolute;
+      top: -48px;
+      right: -5px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 4px 8px;
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      pointer-events: none;
+    }
+    .sfb-btn {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      border: none; background: none;
+      display: flex; align-items: center; justify-content: center;
+      color: #555; font-size: 13px;
+    }
+    .sfb-btn.del { color: #bbb }
+
+    /* Horizontal scrollbar below canvas */
+    .canvas-hscroll-wrap {
+      width: 100%;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .canvas-hscroll {
+      width: 1150px;
+      height: 6px;
+      background: #bbb;
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+    }
+    .canvas-hscroll-thumb {
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: #bbb;
+      border-radius: 3px;
+    }
+    .clg{
+      display: flex;
+      justify-content: center;
+align-items: center;    }
+
+
+    /* ===================== BOTTOM BAR ===================== */
+    .bottom-bar {
+      height: 46px;
+      background: #fff;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      flex-shrink: 0;
+      z-index: 99;
+      position: relative;
+      width: 100%;
+    }
+
+    /* LEFT — Notes & Timer */
+    .bb-left {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      min-width: 160px;
+    }
+    .bb-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: none; background: none;
+      font-size: 12px; color: #444; font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .bb-btn:hover { background: #f0f0f0; }
+    .bb-btn i { font-size: 12px; }
+
+    /* CENTER — page strip absolutely centered */
+    .bb-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Page thumbnail box */
+    .page-strip-box { 
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #f5f5f5;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      padding: 4px 8px;
+    } 
+
+    /* Mini canvas thumbnail */
+    .mini-canvas {
+      width: 60px;
+      height: 40px;
+      background: #fff;
+      border: 1.5px solid #7d2ae8;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 2px;
+      padding: 4px;
+      align-items: center;
+      justify-items: center;
+    }
+    .mc-circle  { width: 8px; height: 8px; border-radius: 50%; background: #7ed957; }
+    .mc-square  { width: 8px; height: 7px; background: #f5c542; }
+    .mc-tri     { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 8px solid #f07030; }
+    .mc-penta   { width: 8px; height: 8px; background: #1e1fa0; clip-path: polygon(50% 0%,100% 36%,82% 100%,18% 100%,0% 36%); }
+    .mc-plus    { width: 8px; height: 8px; background: #111; clip-path: polygon(35% 0%,65% 0%,65% 35%,100% 35%,100% 65%,65% 65%,65% 100%,35% 100%,35% 65%,0% 65%,0% 35%,35% 35%); }
+    .mc-para    { width: 8px; height: 6px; background: #c084fc; clip-path: polygon(20% 0%,100% 0%,80% 100%,0% 100%); }
+    .mc-arrow   { width: 8px; height: 8px; background: #a78bfa; clip-path: polygon(50% 0%,100% 42%,72% 42%,72% 100%,28% 100%,28% 42%,0% 42%); }
+    .mc-heart   { width: 8px; height: 8px; background: #e74c3c; clip-path: path('M4 7.5C4 7.5 0 4.8 0 2.5C0 1 1 0 2.5 0C3.2 0 3.7 0.7 4 1.2C4.3 0.7 4.8 0 6.5 0C8 0 8 1 8 2.5C8 4.8 4 7.5 4 7.5Z'); }
+
+    .add-page-btn {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      border: 1.5px solid #ddd;
+      background: #f5f5f5;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; color: #555; font-weight: 300;
+      transition: background 0.15s;
+    }
+    .add-page-btn:hover { background: #eee; }
+
+    .page-dropdown-btn {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      border: 1.5px solid #ddd;
+      background: #f5f5f5;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 10px; color: #555;
+    }
+    .page-dropdown-btn:hover { background: #eee; }
+
+    /* RIGHT — zoom + pages + icons */
+    .bb-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Zoom slider */
+    .zoom-slider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+    .zoom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #999;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .zoom-pct {
+      font-size: 12px; color: #444; font-weight: 500;
+      min-width: 32px; text-align: right;
+    }
+
+    .pages-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1.5px solid #ddd;
+      background: #f5f5f5;
+      font-size: 12px; color: #333; font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pages-btn:hover { background: #eee; }
+    .pages-btn i { font-size: 12px; }
+
+    .pages-count {
+      font-size: 12px; color: #555;
+      white-space: nowrap;
+    }
+
+    .bb-icon-btn {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      border: none; background: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #555; font-size: 13px;
+    }
+    .bb-icon-btn:hover { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+<!-- ===================== TOP NAVBAR ===================== -->
+<div class="top-bar">
+  <!-- Left -->
+  <button class="top-menu-btn">File</button>
+  <button class="top-menu-btn">Resize</button>
+  <div class="top-divider"></div>
+  <button class="editing-btn">
+    <i class="fa fa-pencil pencil-icon"></i>
+    Editing
+    <i class="fa fa-chevron-down" style="font-size:10px; opacity:0.7;"></i>
+  </button>
+  <div class="top-divider"></div>
+  <button class="top-icon-btn disabled" title="Undo"><i class="fa fa-rotate-left"></i></button>
+  <button class="top-icon-btn" title="Redo"><i class="fa fa-rotate-right"></i></button>
+  <div class="top-divider"></div>
+  <div class="new-wrap">
+    <span class="new-badge">New</span>
+    <button class="magic-circle-btn" title="Magic tools">
+      <i class="fa fa-wand-magic-sparkles"></i>
+    </button>
+  </div>
+
+  <!-- Center -->
+  <div class="top-center">
+    <button class="sample-text">Sample</button>
+  </div>
+
+  <!-- Right -->
+  <div class="top-right">
+    <button class="btn-trial">
+      <span class="crown-icon">✦</span>
+      Start your trial for ₹0
+    </button>
+    <div class="avatar-circle">A</div>
+    <button class="top-icon-btn" style="color:rgba(255,255,255,0.8);" title="Stats"><i class="fa fa-chart-bar"></i></button>
+    <button class="top-icon-btn" style="color:rgba(255,255,255,0.8);" title="Comments"><i class="fa fa-comment"></i></button>
+    <button class="btn-present">Present</button>
+    <button class="btn-chevron-down"><i class="fa fa-chevron-down"></i></button>
+    <button class="btn-share">Share</button>
+  </div>
+</div>
+
+<!-- ===================== EDITOR LAYOUT ===================== -->
+<div class="editor-layout">
+
+  <!-- LEFT ICON SIDEBAR -->
+  <div class="icon-sidebar">
+
+    <button class="sidebar-item active">
+      <div class="si-icon">
+        <div class="template-icon">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <span class="si-label">Templates</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon" style="font-size:22px;">
+        <!-- Elements icon: two overlapping shapes -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="10" width="10" height="10" rx="2" fill="#888"/>
+          <polygon points="12,2 22,12 12,22 2,12" fill="none" stroke="#888" stroke-width="2"/>
+        </svg>
+      </div>
+      <span class="si-label">Elements</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon"><i class="fa fa-font" style="font-size:20px;"></i></div>
+      <span class="si-label">Text</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="9" stroke="#888" stroke-width="2"/>
+          <text x="11" y="16" text-anchor="middle" font-size="11" font-weight="900" fill="#888" font-family="serif">B</text>
+        </svg>
+      </div>
+      <span class="si-label">Brand</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon"><i class="fa fa-cloud-arrow-up" style="font-size:20px;"></i></div>
+      <span class="si-label">Uploads</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M4 4 L10 11 L4 18" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+          <path d="M11 16 L18 16" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="si-label">Tools</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon"><i class="fa fa-folder" style="font-size:20px;"></i></div>
+      <span class="si-label">Projects</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="2" width="8" height="8" rx="2" fill="#888"/>
+          <rect x="12" y="2" width="8" height="8" rx="2" fill="#888"/>
+          <rect x="2" y="12" width="8" height="8" rx="2" fill="#888"/>
+          <rect x="12" y="12" width="8" height="8" rx="2" fill="#888"/>
+        </svg>
+      </div>
+      <span class="si-label">Apps</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon"><i class="fa fa-wand-magic-sparkles" style="font-size:18px;"></i></div>
+      <span class="si-label">Magic Media</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon"><i class="fa fa-music" style="font-size:20px;"></i></div>
+      <span class="si-label">Audio</span>
+    </button>
+
+    <button class="sidebar-item">
+      <div class="si-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="6" width="18" height="12" rx="2" stroke="#888" stroke-width="2"/>
+          <path d="M9 10 L15 13 L9 16 Z" fill="#888"/>
+        </svg>
+      </div>
+      <span class="si-label">videoforme</span>
+    </button>
+
+  </div>
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+
+    <div class="panel-top">
+      <div class="search-row">
+        <i class="fa fa-plus plus-icon"></i>
+        <input type="text" placeholder="Describe your ideal design" />
+        <i class="fa fa-microphone mic-ic"></i>
+      </div>
+      <div class="action-row">
+        <button class="btn-gen">
+          <i class="fa fa-wand-magic-sparkles star-icon"></i>
+          Generate
+        </button>
+        <button class="btn-srch">Search</button>
+      </div>
+    </div>
+
+    <div class="panel-scroll">
+
+      <!-- Recently used -->
+      <div class="sec-head">
+        <span>Recently used</span>
+        <a href="#">See all</a>
+      </div>
+      <div class="recent-grid">
+        <div class="recent-thumb">
+          <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=200&q=70" alt="Recent 1"/>
+        </div>
+        <div class="recent-thumb">
+          <div style="background: linear-gradient(135deg,#1a3a6e,#2855a0); width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#fff;font-size:11px;font-weight:800;text-align:center;line-height:1.2;">PROJECT<br/>PRESENTATION</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- All results -->
+      <div class="sec-head">
+        <span>All results</span>
+      </div>
+      <div class="results-grid">
+
+        <!-- PORTFOLIO dark -->
+        <div class="result-card">
+          <div style="background:#111;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:8px;">
+            <span style="color:#fff;font-size:20px;font-weight:900;line-height:1;text-align:center;">PORTO<br/>FOLIO.</span>
+          </div>
+        </div>
+
+        <!-- Teaching Portfolio -->
+        <div class="result-card">
+          <div style="background:#0a0a1a;width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=200&q=60') center/cover;opacity:0.4;"></div>
+            <span style="color:#fff;font-size:11px;font-weight:700;text-align:center;position:relative;font-style:italic;">Teaching<br/>Portfolio</span>
+          </div>
+        </div>
+
+        <!-- CREATIVE BRIEF red -->
+        <div class="result-card">
+          <div style="background:#cc1a1a;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#fff;font-size:14px;font-weight:900;text-align:center;line-height:1.1;">CREATIVE<br/>BRIEF</span>
+          </div>
+        </div>
+
+        <!-- Creative Portfolio light -->
+        <div class="result-card">
+          <div style="background:#f5f5f0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#111;font-size:14px;font-weight:900;text-align:center;line-height:1.2;">Creative<br/>Portfolio</span>
+          </div>
+        </div>
+
+        <!-- PITCH DECK -->
+        <div class="result-card">
+          <div style="background:#8b1a1a;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#fff;font-size:14px;font-weight:900;text-align:center;line-height:1.1;">PITCH<br/>DECK</span>
+          </div>
+          <div class="w-badge">W</div>
+        </div>
+
+        <!-- portfolio script -->
+        <div class="result-card">
+          <div style="background:#2a2a2a;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#d4a84b;font-size:16px;font-weight:400;font-style:italic;font-family:Georgia,serif;">portfolio</span>
+          </div>
+          <div class="w-badge">W</div>
+        </div>
+
+        <!-- portfolio minimal -->
+        <div class="result-card">
+          <div style="background:#f0ede8;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#333;font-size:14px;font-weight:400;font-style:italic;font-family:Georgia,serif;">portfolio</span>
+          </div>
+        </div>
+
+        <!-- DIGITAL dark -->
+        <div class="result-card">
+          <div style="background:#111;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:8px;">
+            <span style="color:#ff4444;font-size:15px;font-weight:900;letter-spacing:1px;">DIGITAL</span>
+          </div>
+          <div class="w-badge">W</div>
+        </div>
+
+        <!-- blank light -->
+        <div class="result-card">
+          <div style="background:#f8f8f5;width:100%;height:100%;position:relative;">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=200&q=60') center/cover;opacity:0.5;"></div>
+          </div>
+        </div>
+
+        <!-- CREATIVE dark red -->
+        <div class="result-card">
+          <div style="background:#cc1500;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px;">
+            <span style="color:#fff;font-size:13px;font-weight:900;text-align:center;">CREATIVE</span>
+            <span style="color:#ffcc00;font-size:18px;font-weight:900;text-align:center;">VOL.02</span>
+          </div>
+          <div class="w-badge">W</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Collapse arrow -->
+    <div class="panel-collapse-arrow" id="collapseArrow">
+      <i class="fa fa-chevron-left"></i>
+    </div>
+
+  </div>
+
+  <!-- ===================== CANVAS ZONE ===================== -->
+  <div class="canvas-zone">
+  <div class="canvas-scroll-area">
+
+    <!-- Floating second toolbar (centered top) -->
+    <div class="float-toolbar-top">
+      <button class="ft-btn">Edit <span class="red-dot ms-1"></span></button>
+      <div class="ft-sep"></div>
+      <!-- Three lines icon -->
+      <button class="ft-icon">
+        <div class="lines-icon"><span></span><span></span><span></span></div>
+      </button>
+      <div class="ft-sep"></div>
+      <!-- Corner radius -->
+      <button class="ft-icon"><div class="corner-icon"></div></button>
+      <div class="ft-sep"></div>
+      <!-- Grid/crosshatch -->
+      <button class="ft-icon">
+        <div class="grid-icon"><span></span><span></span><span></span><span></span></div>
+      </button>
+      <div class="ft-sep"></div>
+      <button class="ft-btn">Effects</button>
+      <button class="ft-btn">Animate</button>
+      <button class="ft-btn">Position</button>
+      <div class="ft-sep"></div>
+      <button class="ft-icon"><i class="fa fa-paint-brush ft-paint"></i></button>
+    </div>
+
+    <!-- CANVAS BOARD -->
+    <div class="canvas-board">
+
+      <!-- Row 1 -->
+      <div class="sh-circle"></div>
+      <div class="sh-square"></div>
+      <div class="sh-triangle"></div>
+      <div class="sh-pentagon"></div>
+
+      <!-- Row 2 -->
+      <div class="sh-plus"></div>
+      <div class="sh-parallelogram"></div>
+      <div class="sh-arrow"></div>
+
+      <!-- Heart (selected with handles) -->
+      <div class="sh-heart-container" id="heartContainer">
+        <!-- SVG Heart -->
+        <svg class="sh-heart-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 80 C50 80 5 50 5 25 C5 10 15 2 28 2 C37 2 44 8 50 16 C56 8 63 2 72 2 C85 2 95 10 95 25 C95 50 50 80 50 80Z" fill="#e74c3c"/>
+        </svg>
+        <!-- Selection border -->
+        <div class="selection-box"></div>
+        <!-- Handles -->
+        <div class="rh tl"></div>
+        <div class="rh tc"></div>
+        <div class="rh tr"></div>
+        <div class="rh ml"></div>
+        <div class="rh mr"></div>
+        <div class="rh bl"></div>
+        <div class="rh bc"></div>
+        <div class="rh br"></div>
+        <!-- Rotate -->
+        <div class="rotate-btn"><i class="fa fa-rotate-right"></i></div>
+        <!-- Float action bar above -->
+        <div class="shape-float-bar">
+          <button class="sfb-btn"><i class="fa fa-arrows-rotate"></i></button>
+          <button class="sfb-btn"><i class="fa fa-lock"></i></button>
+          <button class="sfb-btn"><i class="fa fa-clone"></i></button>
+          <button class="sfb-btn del"><i class="fa fa-trash"></i></button>
+          <button class="sfb-btn"><i class="fa fa-ellipsis"></i></button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Horizontal scrollbar -->
+    <div class="canvas-hscroll-wrap">
+      <div class="canvas-hscroll">
+        <div class="canvas-hscroll-thumb"></div>
+      </div>
+    </div>
+
+  </div><!-- end canvas-scroll-area -->
+ 
+         <div class="clg">
+           <div class="mini-canvas">
+            <div class="mc-circle"></div>
+            <div class="mc-square"></div>
+            <div class="mc-tri"></div>
+            <div class="mc-penta"></div>
+            <div class="mc-plus"></div>
+            <div class="mc-para"></div>
+            <div class="mc-arrow"></div>
+            <div class="mc-heart"></div>
+          </div>
+        
+          <div class="mini-canvas">
+            <i class="fa-solid fa-plus"></i>
+            <i class="fa-solid fa-angle-up"></i>
+          </div>
+         </div>
+    <!-- ===================== BOTTOM BAR (inside canvas-zone) ===================== -->
+    <div class="bottom-bar">
+
+      <!-- LEFT: Notes & Timer -->
+      <div class="bb-left">
+        <button class="bb-btn"><i class="fa fa-pen-to-square"></i> Notes</button>
+        <button class="bb-btn"><i class="fa fa-clock"></i> Timer</button>
+      </div>
+
+      <!-- CENTER: Page thumbnail (absolutely positioned) -->
+      <div class="bb-center">
+       
+        <div class="add-page-btn">+</div>
+        <button class="page-dropdown-btn"><i class="fa fa-chevron-down"></i></button>
+      </div>
+
+      <!-- RIGHT: zoom slider, %, Pages, 1/1, icons -->
+      <div class="bb-right">
+        <input type="range" class="zoom-slider" min="10" max="200" value="53" id="zoomSlider"/>
+        <span class="zoom-pct" id="zoomPct">53%</span>
+        <button class="pages-btn"><i class="fa fa-file-lines"></i> Pages</button>
+        <span class="pages-count">1 / 1</span>
+        <button class="bb-icon-btn" title="Grid view"><i class="fa fa-grip"></i></button>
+        <button class="bb-icon-btn" title="Fit screen"><i class="fa fa-up-right-and-down-left-from-center"></i></button>
+        <button class="bb-icon-btn" title="Fullscreen"><i class="fa fa-expand"></i></button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Zoom slider
+  const slider = document.getElementById('zoomSlider');
+  const zoomPct = document.getElementById('zoomPct');
+  slider.addEventListener('input', function() {
+    zoomPct.textContent = this.value + '%';
+  });
+
+  // Sidebar item active toggle
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Panel collapse  
+  const collapseArrow = document.getElementById('collapseArrow');
+  const leftPanel = document.querySelector('.left-panel');
+  let collapsed = false;
+  collapseArrow.addEventListener('click', function() {
+    collapsed = !collapsed;
+    leftPanel.style.width = collapsed ? '0' : '292px';
+    leftPanel.style.overflow = collapsed ? 'hidden' : '';
+    collapseArrow.querySelector('i').className = collapsed ? 'fa fa-chevron-right' : 'fa fa-chevron-left';
+  });
+
+  // Shape click highlight
+  const allShapes = document.querySelectorAll('.sh-circle, .sh-square, .sh-pentagon, .sh-plus, .sh-parallelogram, .sh-arrow');
+  allShapes.forEach(s => {
+    s.addEventListener('click', function(e) {
+      e.stopPropagation();
+      allShapes.forEach(x => x.style.outline = 'none');
+      this.style.outline = '2px solid #7d2ae8';
+      this.style.outlineOffset = '3px';
+    });
+  });
+  document.querySelector('.canvas-board').addEventListener('click', function() {
+    allShapes.forEach(x => x.style.outline = 'none');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial, sans-serif;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:repeat(4, 200px);
+    gap:60px;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Circle */
+.circle{
+    width:150px;
+    height:150px;
+    background:#b7f35c;
+    border-radius:50%;
+}
+
+/* Square */
+.square{
+    width:150px;
+    height:150px;
+    background:#f1d65b;
+}
+
+/* Triangle */
+.triangle{
+    width:0;
+    height:0;
+    border-left:80px solid transparent;
+    border-right:80px solid transparent;
+    border-bottom:150px solid orange;
+}
+
+/* Pentagon */
+.pentagon{
+    position:relative;
+    width:100px;
+    border-width:100px 30px 0;
+    border-style:solid;
+    border-color:blue transparent;
+}
+
+.pentagon:before{
+    content:"";
+    popx;
+    left:-30px;
+    width:0;
+    height:0;
+    border-style:solid;
+    border-width:0 80px 70px;
+    border-color:transparent transparent blue;
+}
+
+/* Plus */
+.plus{
+    position:relative;
+    width:60px;
+    height:180px;
+    background:black;
+    margin-left:45px;
+}
+
+.plus:before{
+    content:"";
+    position:absolute;
+    left:-60px;
+    top:60px;
+    width:180px;
+    height:60px;
+    background:black;
+}
+
+/* Parallelogram */
+.parallelogram{
+    width:150px;
+    height:150px;
+    background:mediumorchid;
+    transform:skew(20deg);
+}
+
+/* Arrow */
+.arrow{
+    position:relative;
+    width:80px;
+    height:120px;
+    background:#8a4df5;
+    margin-top:40px;
+}
+
+.arrow:before{
+    content:"";
+    position:absolute;
+    top:-90px;
+    left:-45px;
+    border-left:85px solid transparent;
+    border-right:85px solid transparent;
+    border-bottom:90px solid #8a4df5;
+}
+
+/* Heart */
+.heart{
+    position:relative;
+    width:100px;
+    height:90px;
+}
+
+.heart:before,
+.heart:after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:160px;
+    background:red;
+    border-radius:50px 50px 0 0;
+}
+
+.heart:before{
+    left:50px;
+    transform:rotate(-45deg);
+    transform-origin:0 100%;
+}
+
+.heart:after{
+    left:-50px;
+    transform:rotate(45deg);
+    transform-origin:100% 100%;
+}  
