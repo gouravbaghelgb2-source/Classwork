@@ -1,0 +1,116 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2ff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+}
+
+.container h1 {
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.container button {
+    margin-top: 20px;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: white;
+    width: 90%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 12px;
+    position: relative;
+    transform: translateY(-30px) scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.overlay.active .modal {
+    transform: translateY(0) scale(1);
+}
+
+.close-btn {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    background: transparent;
+    color: #333;
+    font-size: 28px;
+    padding: 2px 8px;
+}
+
+.close-btn:hover {
+    background: #eee;
+}
+
+.modal h2 {
+    margin-bottom: 12px;
+}
+
+.modal p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#contactForm button {
+    width: 100%;
+}

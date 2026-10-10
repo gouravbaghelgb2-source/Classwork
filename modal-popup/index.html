@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Popup Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p>Click the button to open the popup.</p>
+        <button id="openBtn">Open Modal</button>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="modal" id="modal">
+            <button class="close-btn" id="closeBtn">&times;</button>
+
+            <h2>Contact Us</h2>
+            <p>Welcome to our website! Send us a message.</p>
+
+            <form id="contactForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
